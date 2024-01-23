@@ -1,6 +1,6 @@
 #!/usr/bin/R
 
-# A function that find a minimun value within a numeric vector
+# A function that finds the minimun value within a numeric vector.
 find_min<- function(x) {
      if (!is.numeric(x)) {
           stop("Input must be a numeric vector.")
