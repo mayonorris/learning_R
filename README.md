@@ -9,9 +9,13 @@ navigateur grâce à [webR](https://docs.r-wasm.org/webr/) et à l'extension
 [quarto-live](https://github.com/r-wasm/quarto-live).
 
 - `index.qmd`, `cursus.qmd` : accueil et catalogue des modules
+- `progression.qmd`, `communaute.qmd` : ma progression, communauté et FAQ
 - `modules/00-demarrer/` : module 0, 4 leçons
 - `modules/01-initiation/` : module 1, 7 leçons
 - `assets/theme.scss` : couleurs et typographie
+- `assets/progression.html` : inclus dans chaque page ; progression et série de
+  jours (stockées dans le navigateur), code de reprise, partage WhatsApp et
+  erreurs R expliquées en français
 - `assets/mesure.html` : barre de mesure du test technique (voir
   [`SPIKE.md`](SPIKE.md)), à inclure dans une page pour refaire un test
 

@@ -4,6 +4,7 @@ subtitle: "7 leçons · environ 70 minutes · Gratuit"
 format:
   html:
     theme: [cosmo, ../../assets/theme.scss]
+    include-after-body: ../../assets/progression.html
 ---
 
 Les bases du langage : types, vecteurs, conditions, boucles et vos premières

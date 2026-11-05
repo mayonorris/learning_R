@@ -1,0 +1,67 @@
+---
+title: "Communauté"
+subtitle: "On apprend mieux à plusieurs : posez vos questions, aidez les autres, suivez les nouveautés."
+format:
+  html:
+    theme: [cosmo, assets/theme.scss]
+    include-after-body: assets/progression.html
+---
+
+## Groupe d'entraide WhatsApp
+
+Partagez une erreur que vous ne comprenez pas, montrez votre mini-projet,
+aidez un camarade. Le groupe est animé en français.
+
+::: {.callout-note appearance="minimal"}
+Le lien du groupe sera publié ici à l'ouverture.
+:::
+
+Pour poser une question efficacement, collez trois choses : votre **code**, le
+**message d'erreur complet** et ce que vous **attendiez**.
+
+## Questions fréquentes
+
+::: {.callout-note collapse="true" title="Faut-il installer R ?"}
+Non, pas pour commencer : le code se lance dans votre navigateur. La leçon
+[0.3](modules/00-demarrer/0.3-installer-r-rstudio.qmd) explique ensuite
+comment installer R et RStudio sur votre ordinateur.
+:::
+
+::: {.callout-note collapse="true" title="Une leçon consomme-t-elle beaucoup de données ?"}
+Les résultats des exemples sont déjà affichés : vous pouvez lire toute la
+leçon sans lancer R. R se télécharge pour pratiquer, puis votre navigateur le
+garde en mémoire pour les leçons suivantes.
+:::
+
+::: {.callout-note collapse="true" title="Est-ce vraiment gratuit ?"}
+Oui. Les modules Démarrer, Initiation, Structures de données et Manipulation de
+données sont gratuits et sans compte. Les parcours avancés et le parcours
+métier seront payants, par mobile money.
+:::
+
+::: {.callout-note collapse="true" title="Ma progression est-elle sauvegardée ?"}
+Oui, dans votre navigateur, sur cet appareil. Pour continuer sur un autre
+appareil, utilisez le code de reprise de la page
+[Ma progression](progression.qmd).
+:::
+
+::: {.callout-note collapse="true" title="Puis-je obtenir une attestation ?"}
+Une attestation de fin des fondamentaux est prévue. Les parcours payants
+donneront une attestation vérifiable par lien ou QR code.
+:::
+
+## Parcours Suivi-évaluation avec R
+
+Un parcours métier pour les chargés de suivi-évaluation : de l'export
+KoboToolbox au rapport mensuel produit automatiquement.
+
+::: {.callout-note appearance="minimal"}
+Le formulaire pour être prévenu de l'ouverture sera publié ici.
+:::
+
+## À propos
+
+Learning R est une plateforme de formation à R en français, conçue d'abord
+pour les étudiants et les professionnels de la donnée au Togo et au Bénin. Les
+cours sont écrits par Mayo T. Norris Kadanga. Les bases restent gratuites ;
+les parcours pro financent le projet.

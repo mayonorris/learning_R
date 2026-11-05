@@ -4,6 +4,7 @@ subtitle: "Des leçons de 10 minutes, du code à lancer dans votre navigateur et
 format:
   html:
     theme: [cosmo, assets/theme.scss]
+    include-after-body: assets/progression.html
 ---
 
 [Commencer la première leçon](modules/00-demarrer/0.1-pourquoi-r.qmd){.btn .btn-primary .btn-lg}

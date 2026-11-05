@@ -5,6 +5,8 @@ project:
   render:
     - index.qmd
     - cursus.qmd
+    - progression.qmd
+    - communaute.qmd
     - "modules/00-demarrer/*.qmd"
     - "modules/01-initiation/*.qmd"
 
@@ -19,6 +21,10 @@ website:
         href: index.qmd
       - text: "Cursus"
         href: cursus.qmd
+      - text: "Ma progression"
+        href: progression.qmd
+      - text: "Communauté"
+        href: communaute.qmd
   sidebar:
     - title: "Cursus"
       style: docked

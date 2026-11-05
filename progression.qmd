@@ -1,0 +1,13 @@
+---
+title: "Ma progression"
+subtitle: "Vos leçons terminées, votre série de jours et votre code de reprise."
+format:
+  html:
+    theme: [cosmo, assets/theme.scss]
+    include-after-body: assets/progression.html
+---
+
+::: {#lr-progression}
+Chargement de votre progression… Si ce message reste affiché, votre
+navigateur bloque JavaScript : la progression ne peut pas s'afficher.
+:::
