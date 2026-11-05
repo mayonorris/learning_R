@@ -31,5 +31,5 @@ Aucun. Un téléphone ou un ordinateur avec un navigateur suffit.
 
 ::: {.callout-note appearance="minimal"}
 Ce module s'appuie sur le support de formation « R for Data Science »
-(IMSP-CEA, décembre 2023) de Mayo T. Norris Kadanga et Edem Togbenu.
+(IMSP-CEA, décembre 2023) de Mayo T. Norris Kadanga.
 :::
