@@ -1,0 +1,120 @@
+<!-- Barre de mesure du test technique (spike). À retirer des vraies leçons. -->
+<style>
+  #mesure {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 2000;
+    background: #14233A; color: #FFFFFF; font: 14px/1.4 system-ui, -apple-system, Roboto, sans-serif;
+    padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+    display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center;
+  }
+  #mesure .m-temps { font-variant-numeric: tabular-nums; font-weight: 700; min-width: 5.5em; }
+  #mesure button {
+    font: inherit; font-weight: 600; border: 1px solid #5B6B84; background: transparent; color: #FFFFFF;
+    border-radius: 8px; padding: 6px 10px; min-height: 36px; cursor: pointer;
+  }
+  #mesure button.m-fait { background: #1E7B4F; border-color: #1E7B4F; }
+  #mesure button.m-copier { background: #276DC3; border-color: #276DC3; }
+  #mesure textarea { width: 100%; height: 9em; font: 12px ui-monospace, Menlo, monospace; }
+  body { padding-bottom: 120px; }
+</style>
+<div id="mesure" role="region" aria-label="Mesures du test technique">
+  <span class="m-temps" id="m-temps">0,0 s</span>
+  <button type="button" data-etape="R prêt">R prêt</button>
+  <button type="button" data-etape="Code lancé">Code lancé</button>
+  <button type="button" data-etape="Exercice réussi">Exercice réussi</button>
+  <button type="button" class="m-copier" id="m-copier">Copier</button>
+</div>
+<script>
+(function () {
+  "use strict";
+  var notes = {};
+  var cle = "learningr-spike-passages";
+  var passage = 1;
+  try {
+    passage = (parseInt(localStorage.getItem(cle), 10) || 0) + 1;
+    localStorage.setItem(cle, String(passage));
+  } catch (e) {}
+
+  function secondes(ms) { return (ms / 1000).toFixed(1).replace(".", ","); }
+  function maintenant() { return performance.now(); }
+
+  var temps = document.getElementById("m-temps");
+  setInterval(function () { temps.textContent = secondes(maintenant()) + " s"; }, 200);
+
+  // Premier affichage de contenu, mesuré par le navigateur quand il le permet.
+  try {
+    new PerformanceObserver(function (liste) {
+      liste.getEntries().forEach(function (e) {
+        if (e.name === "first-contentful-paint") notes["Texte affiché"] = e.startTime;
+      });
+    }).observe({ type: "paint", buffered: true });
+  } catch (e) {}
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!notes["Texte affiché"]) notes["Texte affiché"] = maintenant();
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("#mesure [data-etape]"), function (b) {
+    b.addEventListener("click", function () {
+      var etape = b.getAttribute("data-etape");
+      if (notes[etape] === undefined) notes[etape] = maintenant();
+      b.classList.add("m-fait");
+      b.textContent = etape + " : " + secondes(notes[etape]) + " s";
+    });
+  });
+
+  function octetsPage() {
+    // Ne compte que ce que la page télécharge elle-même. webR se charge dans un
+    // « worker » : ses fichiers n'apparaissent pas ici (voir SPIKE.md).
+    var total = 0, inconnus = 0;
+    var nav = performance.getEntriesByType("navigation")[0];
+    if (nav) total += nav.transferSize || 0;
+    performance.getEntriesByType("resource").forEach(function (r) {
+      if (r.transferSize) total += r.transferSize; else inconnus += 1;
+    });
+    return { total: total, inconnus: inconnus };
+  }
+
+  function rapport() {
+    var c = navigator.connection || {};
+    var o = octetsPage();
+    var lignes = [
+      "Learning R : test webR sur téléphone",
+      "Date : " + new Date().toLocaleString("fr-FR"),
+      "Passage sur ce téléphone : " + passage + (passage === 1 ? " (premier, sans cache)" : " (avec cache)"),
+      "Appareil : " + navigator.userAgent,
+      "Mémoire annoncée : " + (navigator.deviceMemory ? navigator.deviceMemory + " Go" : "inconnue") +
+        " · cœurs : " + (navigator.hardwareConcurrency || "?") + " · écran : " + screen.width + " px",
+      "Réseau : " + (c.effectiveType || "inconnu") + (c.downlink ? " · " + c.downlink + " Mb/s" : "") +
+        (c.saveData ? " · économiseur de données actif" : ""),
+      "Page hors webR : " + (o.total / 1048576).toFixed(2).replace(".", ",") + " Mo" +
+        (o.inconnus ? " (" + o.inconnus + " fichiers non mesurables)" : "")
+    ];
+    ["Texte affiché", "R prêt", "Code lancé", "Exercice réussi"].forEach(function (k) {
+      lignes.push(k + " : " + (notes[k] !== undefined ? secondes(notes[k]) + " s" : "non noté"));
+    });
+    return lignes.join("\n");
+  }
+
+  document.getElementById("m-copier").addEventListener("click", function () {
+    var texte = rapport();
+    var secours = function () {
+      var zone = document.getElementById("m-texte");
+      if (!zone) {
+        zone = document.createElement("textarea");
+        zone.id = "m-texte";
+        zone.setAttribute("aria-label", "Mesures à copier");
+        document.getElementById("mesure").appendChild(zone);
+      }
+      zone.value = texte;
+      zone.focus();
+      zone.select();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texte).then(function () {
+        document.getElementById("m-copier").textContent = "Copié !";
+      }, secours);
+    } else {
+      secours();
+    }
+  });
+})();
+</script>

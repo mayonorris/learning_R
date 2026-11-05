@@ -1,0 +1,25 @@
+---
+title: "Test technique sur téléphone"
+subtitle: "R dans le navigateur avec webR : est-ce utilisable avec un téléphone d'entrée de gamme et un forfait mobile ?"
+format:
+  html:
+    theme: [cosmo, assets/theme.scss]
+---
+
+Cette page sert à une seule chose : vérifier, sur de vrais téléphones, que la
+leçon de test reste rapide et légère avant d'écrire les 11 leçons du MVP.
+
+## Ce qu'il faut faire
+
+1. Ouvrez la [leçon de test 1.2 Vecteurs](modules/01-initiation/1.2-vecteurs.qmd)
+   sur le téléphone, en données mobiles (pas en Wi-Fi).
+2. Suivez le protocole décrit dans le fichier `SPIKE.md` du dépôt.
+3. Une barre de mesure apparaît en bas de la leçon. Touchez ses boutons au bon
+   moment, puis « Copier » pour récupérer les résultats.
+
+## Ce que l'on vérifie
+
+- Le texte et les résultats déjà calculés s'affichent-ils vite, sans attendre R ?
+- Combien de temps faut-il pour que R soit prêt, au premier passage puis au second ?
+- Combien de données mobiles la leçon consomme-t-elle ?
+- Peut-on faire l'exercice au clavier du téléphone ?

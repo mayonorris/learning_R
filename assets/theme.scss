@@ -1,0 +1,19 @@
+/*-- scss:defaults --*/
+// Charte validée dans le document de cadrage (onglet UI).
+$primary: #276DC3;
+$link-color: #276DC3;
+$font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, sans-serif;
+$font-family-monospace: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Roboto Mono", monospace;
+$font-size-root: 17px;
+$line-height-base: 1.6;
+$code-block-bg: #F4F1EC;
+
+/*-- scss:rules --*/
+.callout-tip {
+  border-left-color: #C2571A !important;
+}
+
+.callout-tip .callout-icon::before,
+.callout-tip .callout-title-container {
+  color: #9C4313;
+}
