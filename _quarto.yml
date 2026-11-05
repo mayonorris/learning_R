@@ -1,0 +1,18 @@
+project:
+  type: website
+  output-dir: _site
+  # Liste explicite : les scripts .R existants ne sont pas rendus comme des pages.
+  render:
+    - index.qmd
+    - modules/01-initiation/1.2-vecteurs.qmd
+
+lang: fr
+
+website:
+  title: "Learning R"
+  navbar:
+    left:
+      - text: "Accueil"
+        href: index.qmd
+      - text: "Leçon test : 1.2 Vecteurs"
+        href: modules/01-initiation/1.2-vecteurs.qmd

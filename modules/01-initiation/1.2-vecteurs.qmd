@@ -1,0 +1,86 @@
+---
+title: "1.2 Vecteurs"
+subtitle: "Module 1 · Initiation · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+    include-after-body: ../../assets/mesure.html
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Créer un vecteur avec `c()` et récupérer une valeur par sa position.
+:::
+
+Un vecteur regroupe plusieurs valeurs du même type : des notes, des prix, des
+âges. En R, on le crée avec la fonction `c()`, pour « combiner ».
+
+Le résultat ci-dessous a été calculé à la publication du site : il s'affiche
+sans charger R.
+
+```{r}
+notes <- c(12, 15, 9)
+notes[2]
+```
+
+::: {.callout-tip title="Astuce"}
+En R, on compte à partir de 1 : `notes[1]` est la première valeur. C'est une
+différence avec Python, qui commence à 0.
+:::
+
+## À vous de lancer
+
+Modifiez le code puis appuyez sur le bouton d'exécution (« Run Code »).
+Entre crochets, on peut demander plusieurs positions à la fois.
+
+```{webr}
+notes <- c(12, 15, 9)
+notes[c(1, 3)]
+mean(notes)
+```
+
+Essayez aussi d'écrire `note[2]`, sans le « s », pour voir le message d'erreur
+de R.
+
+## Exercice
+
+Créez un vecteur `prix` contenant 250, 300 et 200 (des prix en FCFA), puis
+affichez le plus petit avec `min()`. Remplacez les `______`.
+
+```{webr}
+#| exercise: ex_prix
+prix <- c(______)
+______(prix)
+```
+
+```{webr}
+#| exercise: ex_prix
+#| check: true
+if (identical(.result, 200)) {
+  list(correct = TRUE, message = "Bravo, c'est juste ! Le plus petit prix est 200 FCFA.")
+} else if (is.numeric(.result) && length(.result) > 1) {
+  list(correct = FALSE, message = "Vous avez affiché tout le vecteur. Utilisez min() pour ne garder que le plus petit prix.")
+} else {
+  list(correct = FALSE, message = "Ce n'est pas encore le bon résultat. Vérifiez les trois prix : 250, 300 et 200.")
+}
+```
+
+::: {.hint exercise="ex_prix"}
+Un vecteur se crée avec `c(250, 300, 200)`. La fonction qui renvoie la plus
+petite valeur s'appelle `min()`.
+:::
+
+::: {.solution exercise="ex_prix"}
+```r
+prix <- c(250, 300, 200)
+min(prix)
+```
+:::
+
+## À retenir
+
+- `c()` crée un vecteur à partir de plusieurs valeurs.
+- `v[i]` renvoie la valeur à la position `i`, en comptant à partir de 1.
+- `min()`, `max()` et `mean()` s'appliquent au vecteur entier.
