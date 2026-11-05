@@ -1,0 +1,113 @@
+---
+title: "1.6 Écrire ses fonctions"
+subtitle: "Module 1 · Initiation · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Écrire une fonction avec des arguments et une valeur par défaut.
+:::
+
+## Une première fonction
+
+Une fonction regroupe des instructions sous un nom, pour les réutiliser.
+
+```{r}
+addition <- function(a, b) {
+  a + b
+}
+addition(2, 3)
+```
+
+Une fonction a quatre parties : un **nom** (`addition`), des **arguments**
+(`a` et `b`), un **corps** entre accolades, et une **valeur de retour** : la
+dernière ligne calculée. `return()` permet de la désigner explicitement.
+
+## Une valeur par défaut
+
+Un argument peut avoir une valeur par défaut, utilisée quand on ne la précise
+pas. Le franc CFA a une parité fixe avec l'euro : 1 euro = 655,957 FCFA.
+
+```{r}
+fcfa_vers_euro <- function(montant, taux = 655.957) {
+  montant / taux
+}
+fcfa_vers_euro(65595.7)
+fcfa_vers_euro(65595.7, taux = 650)
+```
+
+Sans valeur par défaut, oublier un argument provoque une erreur.
+
+## Vérifier les données reçues
+
+Une bonne fonction refuse les données qu'elle ne sait pas traiter, avec un
+message clair. Voici une fonction qui calcule une moyenne et peut ignorer les
+valeurs manquantes :
+
+```{r}
+#| error: true
+ma_moyenne <- function(x, na_rm = FALSE) {
+  if (!is.numeric(x)) {
+    stop("x doit être un vecteur de nombres.")
+  }
+  if (na_rm) {
+    x <- x[!is.na(x)]
+  }
+  sum(x) / length(x)
+}
+ma_moyenne(c(12, 15, NA), na_rm = TRUE)
+ma_moyenne(c("a", "b"))
+```
+
+`x[!is.na(x)]` garde les valeurs qui ne sont pas manquantes : `!` inverse
+`is.na()`.
+
+## Exercice
+
+Écrivez une fonction qui convertit une température de degrés Celsius en degrés
+Fahrenheit, avec la formule F = 9/5 × C + 32, puis testez-la avec 30 °C.
+
+```{webr}
+#| exercise: ex_temperature
+celsius_vers_fahrenheit <- function(c) {
+  ______
+}
+celsius_vers_fahrenheit(30)
+```
+
+```{webr}
+#| exercise: ex_temperature
+#| check: true
+if (isTRUE(all.equal(.result, 86))) {
+  list(correct = TRUE, message = "Bravo : 30 °C font 86 °F.")
+} else if (is.function(.result)) {
+  list(correct = FALSE, message = "Vous avez renvoyé la fonction elle-même. Gardez la dernière ligne qui l'appelle avec 30.")
+} else {
+  list(correct = FALSE, message = "Le résultat attendu est 86. Vérifiez la formule : 9 / 5 * c + 32.")
+}
+```
+
+::: {.hint exercise="ex_temperature"}
+Dans le corps de la fonction, traduisez la formule en R : `9 / 5 * c + 32`.
+:::
+
+::: {.solution exercise="ex_temperature"}
+```r
+celsius_vers_fahrenheit <- function(c) {
+  9 / 5 * c + 32
+}
+celsius_vers_fahrenheit(30)
+```
+:::
+
+## À retenir
+
+- `nom <- function(arguments) { corps }` crée une fonction.
+- La dernière ligne calculée est la valeur renvoyée.
+- Une valeur par défaut (`taux = 655.957`) rend un argument facultatif.
+- `stop()` dans une fonction refuse les données inattendues avec un message clair.

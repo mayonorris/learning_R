@@ -1,18 +1,42 @@
 project:
   type: website
   output-dir: _site
-  # Liste explicite : les scripts .R existants ne sont pas rendus comme des pages.
+  # Liste explicite : les scripts .R du dépôt ne sont pas rendus comme des pages.
   render:
     - index.qmd
-    - modules/01-initiation/1.2-vecteurs.qmd
+    - cursus.qmd
+    - "modules/00-demarrer/*.qmd"
+    - "modules/01-initiation/*.qmd"
 
 lang: fr
 
 website:
   title: "Learning R"
+  page-navigation: true
   navbar:
     left:
       - text: "Accueil"
         href: index.qmd
-      - text: "Leçon test : 1.2 Vecteurs"
-        href: modules/01-initiation/1.2-vecteurs.qmd
+      - text: "Cursus"
+        href: cursus.qmd
+  sidebar:
+    - title: "Cursus"
+      style: docked
+      contents:
+        - section: "Module 0 · Démarrer"
+          href: modules/00-demarrer/index.qmd
+          contents:
+            - modules/00-demarrer/0.1-pourquoi-r.qmd
+            - modules/00-demarrer/0.2-premieres-lignes.qmd
+            - modules/00-demarrer/0.3-installer-r-rstudio.qmd
+            - modules/00-demarrer/0.4-trouver-de-l-aide.qmd
+        - section: "Module 1 · Initiation"
+          href: modules/01-initiation/index.qmd
+          contents:
+            - modules/01-initiation/1.1-valeurs-et-types.qmd
+            - modules/01-initiation/1.2-vecteurs.qmd
+            - modules/01-initiation/1.3-fonctions-de-base.qmd
+            - modules/01-initiation/1.4-conditions.qmd
+            - modules/01-initiation/1.5-boucles.qmd
+            - modules/01-initiation/1.6-ecrire-ses-fonctions.qmd
+            - modules/01-initiation/1.7-mini-projet.qmd

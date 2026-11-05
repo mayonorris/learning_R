@@ -1,0 +1,111 @@
+---
+title: "0.2 Vos premières lignes de R"
+subtitle: "Module 0 · Démarrer · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Lancer du code dans le navigateur et utiliser R comme une calculatrice.
+:::
+
+## Lancez votre première ligne
+
+Appuyez sur « Run Code ». Au premier lancement, R se télécharge dans votre
+navigateur, une seule fois ; ensuite, il reste prêt.
+
+```{webr}
+print("Bienvenue dans le monde de R")
+```
+
+`print()` affiche une valeur. Le texte s'écrit toujours entre guillemets.
+
+## R comme une calculatrice
+
+```{r}
+12 + 15
+14 / 5
+2^10
+15 %/% 4   # division entière : 3
+15 %% 4    # reste de la division : 3
+```
+
+Le symbole `#` commence un **commentaire** : R ignore tout ce qui suit sur la
+ligne. Les commentaires servent à expliquer votre code.
+
+## Quelques fonctions mathématiques
+
+```{r}
+sqrt(144)       # racine carrée
+exp(2)          # exponentielle
+log(exp(1))     # logarithme népérien
+round(pi, 2)    # arrondi à 2 décimales
+ceiling(-2.2)   # entier supérieur
+floor(-2.2)     # entier inférieur
+```
+
+`pi` est une valeur déjà connue de R.
+
+::: {.callout-tip title="Astuce"}
+`sin(2 * pi)` devrait valoir 0, mais R affiche `-2.449294e-16`, c'est-à-dire
+−2,4 × 10⁻¹⁶. R calcule avec une précision limitée : ce nombre minuscule est
+un zéro « presque exact ».
+:::
+
+## Afficher plusieurs éléments avec `cat()`
+
+```{r}
+cat("La valeur de pi dans R est :", pi)
+```
+
+`cat()` colle plusieurs éléments sur une même ligne, sans les guillemets ni le
+`[1]` de `print()`.
+
+## À vous de lancer
+
+Essayez vos propres calculs, puis appuyez sur « Run Code ».
+
+```{webr}
+250 + 300
+1500 * 12
+```
+
+## Exercice
+
+Un sac de riz de 25 kg coûte 17 500 FCFA. Calculez le prix du kilo.
+
+```{webr}
+#| exercise: ex_kilo
+______
+```
+
+```{webr}
+#| exercise: ex_kilo
+#| check: true
+if (isTRUE(all.equal(.result, 700))) {
+  list(correct = TRUE, message = "Exact : le kilo revient à 700 FCFA.")
+} else {
+  list(correct = FALSE, message = "Pas encore. Divisez le prix du sac par son poids.")
+}
+```
+
+::: {.hint exercise="ex_kilo"}
+La division s'écrit avec `/` : prix divisé par poids.
+:::
+
+::: {.solution exercise="ex_kilo"}
+```r
+17500 / 25
+```
+:::
+
+## À retenir
+
+- « Run Code » lance le code ; le premier lancement charge R.
+- R calcule avec `+`, `-`, `*`, `/`, `^`, `%/%` et `%%`.
+- `#` commence un commentaire, que R ignore.
+- `print()` et `cat()` affichent des valeurs.

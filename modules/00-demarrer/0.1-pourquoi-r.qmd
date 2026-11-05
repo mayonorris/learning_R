@@ -1,0 +1,99 @@
+---
+title: "0.1 Pourquoi R ?"
+subtitle: "Module 0 · Démarrer · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Savoir à quoi sert R, et ce que vous saurez faire à la fin du cursus.
+:::
+
+## Une première ligne de R
+
+Cette ligne calcule le prix moyen du kilo de maïs relevé sur quatre marchés
+(prix d'exemple, en FCFA). Le résultat est déjà affiché sous le code.
+
+```{r}
+mean(c(250, 300, 200, 275))
+```
+
+`c()` regroupe les quatre prix et `mean()` calcule leur moyenne. Vous verrez
+ces deux fonctions en détail dans le module 1.
+
+## La science des données
+
+La science des données consiste à tirer des informations utiles de données :
+des enquêtes, des ventes, des relevés de santé, des prix. Elle mêle
+statistique, programmation et connaissance du terrain, et aide à répondre à
+quatre questions :
+
+1. Que s'est-il passé ?
+2. Pourquoi est-ce arrivé ?
+3. Que va-t-il probablement se passer ?
+4. Que faire avec ces résultats ?
+
+## Pourquoi R ?
+
+- **Un vrai langage de programmation.** Vous écrivez des scripts que vous
+  pouvez relancer, corriger et partager. Les tâches répétitives
+  s'automatisent.
+- **Toute la statistique.** Des milliers de packages couvrent les
+  statistiques descriptives, les tests, la modélisation, les graphiques et les
+  rapports.
+- **Tous les domaines.** Santé publique, agronomie, économie, finance,
+  suivi-évaluation : R s'adapte à chacun.
+- **Gratuit et libre.** R ne coûte rien et fonctionne sur Windows, macOS et
+  Linux.
+
+Partout où l'on analyse des données, R est un atout : pour un mémoire, dans la
+statistique publique, dans le suivi-évaluation des projets, en recherche ou en
+entreprise.
+
+## Ce que vous saurez faire
+
+| Étape du cursus | Vous saurez… |
+| --- | --- |
+| Modules 0 et 1 | écrire du code R, vos propres fonctions |
+| Modules 2 et 3 | importer et préparer un tableau de données |
+| Modules 4 et 5 | faire des graphiques et des analyses statistiques |
+| Modules 6 à 8 | produire des rapports et des applications web |
+
+## À vous
+
+```{webr}
+#| exercise: ex_total
+# Calculez le total des trois prix : 250, 300 et 200
+______
+```
+
+```{webr}
+#| exercise: ex_total
+#| check: true
+if (isTRUE(all.equal(.result, 750))) {
+  list(correct = TRUE, message = "Bravo ! Le total est de 750 FCFA.")
+} else {
+  list(correct = FALSE, message = "Ce n'est pas encore 750. Additionnez les trois prix avec +.")
+}
+```
+
+::: {.hint exercise="ex_total"}
+Remplacez `______` par une addition : `250 + 300 + ...`
+:::
+
+::: {.solution exercise="ex_total"}
+```r
+250 + 300 + 200
+```
+:::
+
+## À retenir
+
+- R est un langage gratuit pour analyser des données, dans tous les domaines.
+- Une ligne de R se lance et donne un résultat immédiatement.
+- Dans ce cours, les résultats sont déjà affichés : vous ne lancez R que pour
+  pratiquer.

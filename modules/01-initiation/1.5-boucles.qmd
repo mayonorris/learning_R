@@ -1,0 +1,130 @@
+---
+title: "1.5 Boucles"
+subtitle: "Module 1 · Initiation · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Répéter une action avec `for` et `while`, et construire un résultat pas à pas.
+:::
+
+## La boucle `for`
+
+`for` répète le même code pour chaque valeur d'un vecteur.
+
+```{r}
+villes <- c("Lomé", "Kara", "Cotonou", "Parakou")
+for (ville in villes) {
+  print(ville)
+}
+```
+
+À chaque tour, `ville` prend la valeur suivante du vecteur. Pour avoir aussi
+la position, parcourez les numéros avec `seq_along()` :
+
+```{r}
+for (i in seq_along(villes)) {
+  cat(i, ":", villes[i], "\n")
+}
+```
+
+`"\n"` passe à la ligne.
+
+## Construire un résultat pas à pas
+
+Une boucle sert souvent à garder une valeur en mémoire et à la mettre à jour.
+Par exemple, chercher le plus petit prix :
+
+```{r}
+prix <- c(250, 300, 200, 275)
+plus_petit <- prix[1]
+for (p in prix) {
+  if (p < plus_petit) {
+    plus_petit <- p
+  }
+}
+plus_petit
+```
+
+On part de la première valeur, puis on la remplace chaque fois qu'on trouve
+plus petit.
+
+## La boucle `while`
+
+`while` répète tant qu'une condition est vraie. Combien de mois faut-il pour
+épargner 50 000 FCFA en mettant 7 500 FCFA de côté chaque mois ?
+
+```{r}
+epargne <- 0
+mois <- 0
+while (epargne < 50000) {
+  epargne <- epargne + 7500
+  mois <- mois + 1
+}
+mois
+```
+
+::: {.callout-warning title="Attention aux boucles sans fin"}
+Si la condition de `while` reste toujours vraie, la boucle ne s'arrête jamais.
+Vérifiez que quelque chose change à chaque tour. `repeat`, une autre boucle,
+s'arrête seulement avec `break`.
+:::
+
+::: {.callout-tip title="Astuce"}
+Pour un calcul simple, les fonctions de R comme `sum()` ou `min()` sont plus
+courtes et plus rapides qu'une boucle. Les boucles servent à comprendre, et
+aux traitements que ces fonctions ne savent pas faire.
+:::
+
+## Exercice
+
+Calculez le total des prix avec une boucle `for`.
+
+```{webr}
+#| exercise: ex_boucle
+prix <- c(250, 300, 200)
+total <- 0
+for (p in prix) {
+  total <- ______
+}
+total
+```
+
+```{webr}
+#| exercise: ex_boucle
+#| check: true
+if (isTRUE(all.equal(.result, 750))) {
+  list(correct = TRUE, message = "Bravo : la boucle a additionné les trois prix, 750 FCFA.")
+} else if (isTRUE(all.equal(.result, 200))) {
+  list(correct = FALSE, message = "Le total vaut seulement le dernier prix : ajoutez p à l'ancien total, au lieu de le remplacer.")
+} else {
+  list(correct = FALSE, message = "Pas encore 750. À chaque tour, le nouveau total est l'ancien total plus p.")
+}
+```
+
+::: {.hint exercise="ex_boucle"}
+Le nouveau total est l'ancien total plus le prix du tour : `total + p`.
+:::
+
+::: {.solution exercise="ex_boucle"}
+```r
+prix <- c(250, 300, 200)
+total <- 0
+for (p in prix) {
+  total <- total + p
+}
+total
+```
+:::
+
+## À retenir
+
+- `for (x in v)` répète le code pour chaque valeur de `v`.
+- `while (condition)` répète tant que la condition est vraie.
+- Pour accumuler, partez d'une valeur de départ et mettez-la à jour à chaque
+  tour.
