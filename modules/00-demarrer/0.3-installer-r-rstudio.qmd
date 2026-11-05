@@ -1,0 +1,118 @@
+---
+title: "0.3 Installer R, RStudio et des packages"
+subtitle: "Module 0 · Démarrer · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Installer R et RStudio sur votre ordinateur, créer un projet et installer un
+package.
+:::
+
+Le navigateur suffit pour suivre ce cours. Pour vos propres projets (un
+mémoire, des fichiers Excel, des données volumineuses), vous aurez besoin de R
+sur votre ordinateur.
+
+::: {.callout-tip title="Économisez vos données"}
+Les installateurs de R et de RStudio pèsent plusieurs dizaines de Mo.
+Téléchargez-les en Wi-Fi si vous le pouvez.
+:::
+
+## Installer R puis RStudio
+
+1. **R**, le langage : sur <https://cran.r-project.org>, choisissez votre
+   système (pour Windows : « Download R for Windows » puis « base »), puis
+   lancez l'installateur.
+2. **RStudio**, l'éditeur qui rend R confortable : sur
+   <https://posit.co/download/rstudio-desktop/>, téléchargez la version
+   gratuite et installez-la.
+3. Ouvrez **RStudio**, et non R : RStudio utilise R automatiquement.
+
+Positron, un outil plus récent créé par la même entreprise (Posit), est une
+alternative.
+
+## L'interface de RStudio
+
+| Panneau | Rôle |
+| --- | --- |
+| Script (en haut à gauche) | Écrire et enregistrer votre code |
+| Console (en bas à gauche) | Voir le code s'exécuter et ses résultats |
+| Environnement (en haut à droite) | Voir les objets créés |
+| Fichiers, graphiques, aide (en bas à droite) | Naviguer, voir les graphiques, lire l'aide |
+
+Pour lancer la ligne où se trouve le curseur : **Ctrl + Entrée** (Cmd + Entrée
+sur Mac).
+
+## Créer un projet
+
+Un projet RStudio regroupe tous les fichiers d'un travail (scripts, données,
+résultats) dans un même dossier, repéré par un fichier `.Rproj`.
+
+**File → New Project → New Directory → New Project**, puis choisissez un nom
+et un emplacement. Créez un projet par travail : un pour le mémoire, un pour
+chaque analyse.
+
+## Installer et charger un package
+
+Un package ajoute des fonctions à R. Par exemple, `readxl` lit les fichiers
+Excel.
+
+```{r}
+#| eval: false
+install.packages("readxl")   # une seule fois : télécharge et installe
+library(readxl)              # à chaque session : charge le package
+```
+
+On peut aussi utiliser une fonction sans charger le package, avec `::` :
+
+```{r}
+#| eval: false
+readxl::read_excel("ventes.xlsx")
+```
+
+::: {.callout-warning title="Piège fréquent"}
+`installed.packages()`, avec un **d**, n'installe rien : elle liste les
+packages déjà installés. Pour installer, c'est `install.packages()`.
+:::
+
+## Exercice
+
+Quelle fonction installe un package ? Écrivez son nom entre guillemets.
+
+```{webr}
+#| exercise: ex_install
+"______"
+```
+
+```{webr}
+#| exercise: ex_install
+#| check: true
+if (identical(.result, "install.packages")) {
+  list(correct = TRUE, message = "Exact : install.packages(), sans d.")
+} else if (identical(.result, "installed.packages")) {
+  list(correct = FALSE, message = "Presque : installed.packages() liste les packages installés. Retirez le d.")
+} else {
+  list(correct = FALSE, message = "Ce n'est pas la bonne fonction. Relisez la section « Installer et charger un package ».")
+}
+```
+
+::: {.hint exercise="ex_install"}
+Le nom commence par `install` et se termine par `packages`.
+:::
+
+::: {.solution exercise="ex_install"}
+```r
+"install.packages"
+```
+:::
+
+## À retenir
+
+- Installez R, puis RStudio, et travaillez toujours dans RStudio.
+- Un projet `.Rproj` par travail garde vos fichiers ensemble.
+- `install.packages()` une fois, `library()` à chaque session.

@@ -1,0 +1,113 @@
+---
+title: "1.3 Fonctions de base"
+subtitle: "Module 1 · Initiation · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Résumer un vecteur et filtrer ses valeurs avec une condition.
+:::
+
+## Résumer un vecteur
+
+Voici les recettes d'une boutique sur 10 jours, en milliers de FCFA (données
+d'exemple).
+
+```{r}
+recettes <- c(74, 122, 235, 111, 292, 111, 211, 133, 156, 79)
+sum(recettes)      # total
+mean(recettes)     # moyenne
+median(recettes)   # médiane
+sd(recettes)       # écart-type
+range(recettes)    # minimum et maximum
+```
+
+`min()`, `max()` et `length()` donnent séparément le minimum, le maximum et le
+nombre de valeurs.
+
+## Trouver, trier, chercher
+
+```{r}
+which.max(recettes)    # position du jour record
+sort(recettes)         # du plus petit au plus grand
+unique(recettes)       # sans les doublons
+211 %in% recettes      # 211 fait-il partie des recettes ?
+```
+
+`sort(recettes, decreasing = TRUE)` trie dans l'autre sens.
+
+## Filtrer avec une condition
+
+Une comparaison appliquée à un vecteur donne un vecteur de `TRUE` et `FALSE`.
+
+```{r}
+recettes > 200
+sum(recettes > 200)          # combien de jours au-dessus de 200 ?
+recettes[recettes > 200]     # lesquels ?
+which(recettes > 200)        # à quelles positions ?
+```
+
+Comme `TRUE` vaut 1, `sum()` compte les jours qui respectent la condition.
+
+## Les valeurs manquantes
+
+```{r}
+ventes <- c(12, NA, 9)
+mean(ventes)
+mean(ventes, na.rm = TRUE)
+```
+
+`na.rm = TRUE` demande à la fonction d'ignorer les `NA`. Le même argument
+existe pour `sum()`, `min()`, `max()`, `median()` et `sd()`.
+
+## Quelques fonctions pour le texte
+
+```{r}
+paste("Marché de", c("Lomé", "Kara"))
+paste0("A", 1:3)
+nchar("Cotonou")
+toupper("cotonou")
+```
+
+## Exercice
+
+Affichez les recettes supérieures à la moyenne des recettes.
+
+```{webr}
+#| exercise: ex_filtre
+recettes <- c(74, 122, 235, 111, 292, 111, 211, 133, 156, 79)
+recettes[recettes > ______(recettes)]
+```
+
+```{webr}
+#| exercise: ex_filtre
+#| check: true
+if (isTRUE(all.equal(.result, c(235, 292, 211, 156)))) {
+  list(correct = TRUE, message = "Bravo : 4 jours dépassent la moyenne de 152,4.")
+} else {
+  list(correct = FALSE, message = "Pas encore. Quelle fonction calcule la moyenne ?")
+}
+```
+
+::: {.hint exercise="ex_filtre"}
+La moyenne se calcule avec `mean()`.
+:::
+
+::: {.solution exercise="ex_filtre"}
+```r
+recettes <- c(74, 122, 235, 111, 292, 111, 211, 133, 156, 79)
+recettes[recettes > mean(recettes)]
+```
+:::
+
+## À retenir
+
+- `sum()`, `mean()`, `median()`, `sd()`, `min()`, `max()` résument un vecteur.
+- `v[condition]` garde les valeurs qui respectent la condition.
+- `sum(condition)` compte les valeurs qui la respectent.
+- `na.rm = TRUE` ignore les valeurs manquantes.

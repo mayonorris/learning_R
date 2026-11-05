@@ -1,25 +1,30 @@
 ---
-title: "Test technique sur téléphone"
-subtitle: "R dans le navigateur avec webR : est-ce utilisable avec un téléphone d'entrée de gamme et un forfait mobile ?"
+title: "Apprenez R en français, même avec un petit forfait"
+subtitle: "Des leçons de 10 minutes, du code à lancer dans votre navigateur et des exemples tirés de données d'ici. Gratuit, sans inscription."
 format:
   html:
     theme: [cosmo, assets/theme.scss]
 ---
 
-Cette page sert à une seule chose : vérifier, sur de vrais téléphones, que la
-leçon de test reste rapide et légère avant d'écrire les 11 leçons du MVP.
+[Commencer la première leçon](modules/00-demarrer/0.1-pourquoi-r.qmd){.btn .btn-primary .btn-lg}
+[Voir le cursus](cursus.qmd){.btn .btn-outline-primary .btn-lg}
 
-## Ce qu'il faut faire
+## Chaque leçon se déroule en trois temps
 
-1. Ouvrez la [leçon de test 1.2 Vecteurs](modules/01-initiation/1.2-vecteurs.qmd)
-   sur le téléphone, en données mobiles (pas en Wi-Fi).
-2. Suivez le protocole décrit dans le fichier `SPIKE.md` du dépôt.
-3. Une barre de mesure apparaît en bas de la leçon. Touchez ses boutons au bon
-   moment, puis « Copier » pour récupérer les résultats.
+1. **Lisez.** Une explication courte, avec les résultats du code déjà affichés.
+   Vous pouvez suivre toute la leçon sans rien télécharger.
+2. **Lancez.** Modifiez le code et appuyez sur « Run Code ». R se charge au
+   premier lancement, puis reste prêt.
+3. **Vérifiez.** Un exercice corrigé automatiquement, avec un indice si vous
+   bloquez et la solution si besoin.
 
-## Ce que l'on vérifie
+## Disponible maintenant
 
-- Le texte et les résultats déjà calculés s'affichent-ils vite, sans attendre R ?
-- Combien de temps faut-il pour que R soit prêt, au premier passage puis au second ?
-- Combien de données mobiles la leçon consomme-t-elle ?
-- Peut-on faire l'exercice au clavier du téléphone ?
+| Module | Contenu | Leçons |
+| --- | --- | --- |
+| [Module 0 · Démarrer](modules/00-demarrer/index.qmd) | À quoi sert R, premiers calculs, installation, aide et messages d'erreur | 4 |
+| [Module 1 · Initiation](modules/01-initiation/index.qmd) | Types, vecteurs, fonctions de base, conditions, boucles, vos propres fonctions | 7 |
+
+Les modules suivants (structures de données, manipulation, visualisation,
+analyse, reporting, Shiny) arrivent progressivement. Voir le
+[cursus complet](cursus.qmd).

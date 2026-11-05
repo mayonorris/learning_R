@@ -1,0 +1,119 @@
+---
+title: "1.1 Valeurs et types"
+subtitle: "Module 1 · Initiation · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Ranger des valeurs dans des objets et distinguer nombre, texte et logique.
+:::
+
+## Ranger une valeur dans un objet
+
+```{r}
+x <- 20
+y = 25
+x + y -> z
+z
+```
+
+La flèche `<-` range la valeur de droite dans l'objet de gauche. `=` et `->`
+marchent aussi, mais `<-` est l'usage le plus courant : c'est celui de ce
+cours. Dans RStudio, **Alt + -** écrit la flèche pour vous.
+
+Un nom d'objet commence par une lettre, sans espace ni accent : `prix_mais`,
+`notes2024`. R distingue les majuscules : `Prix` et `prix` sont deux objets
+différents.
+
+## Les types de valeurs
+
+```{r}
+class(20)
+class("Lomé")
+class(TRUE)
+class(2 + 2i)
+```
+
+| Type | Exemples | Usage |
+| --- | --- | --- |
+| `numeric` | `20`, `2.15`, `pi` | Nombres |
+| `character` | `"Lomé"`, `"250"` | Texte, toujours entre guillemets |
+| `logical` | `TRUE`, `FALSE` | Vrai ou faux |
+| `complex` | `2 + 2i` | Nombres complexes, rares en analyse de données |
+
+Un logique se comporte comme un nombre : `TRUE` vaut 1 et `FALSE` vaut 0.
+
+```{r}
+TRUE + FALSE + TRUE
+```
+
+## Les valeurs spéciales
+
+```{r}
+NA + 1      # NA : valeur manquante (Not Available)
+0 / 0       # NaN : calcul impossible (Not a Number)
+1 / 0       # Inf : infini
+is.na(c(1, 2, NA, 12, NA))
+```
+
+`NA` se propage : un calcul avec une valeur manquante donne `NA`. C'est
+volontaire, pour ne pas cacher un trou dans vos données.
+
+`NULL` représente un objet vide, et `rm(x)` supprime l'objet `x`.
+
+## Le piège du nombre écrit comme du texte
+
+Des données importées d'Excel ou d'un formulaire arrivent parfois sous forme
+de texte.
+
+```{r}
+#| error: true
+"250" + 50
+as.numeric("250") + 50
+```
+
+`as.numeric()` convertit le texte en nombre. Son inverse est `as.character()`.
+
+## Exercice
+
+Le prix d'un article a été saisi comme du texte. Convertissez-le en nombre,
+puis ajoutez 500 FCFA.
+
+```{webr}
+#| exercise: ex_conversion
+prix_texte <- "1500"
+______(prix_texte) + 500
+```
+
+```{webr}
+#| exercise: ex_conversion
+#| check: true
+if (isTRUE(all.equal(.result, 2000))) {
+  list(correct = TRUE, message = "Bravo : 1500 + 500 = 2000 FCFA.")
+} else {
+  list(correct = FALSE, message = "Le résultat attendu est 2000. Quelle fonction convertit du texte en nombre ?")
+}
+```
+
+::: {.hint exercise="ex_conversion"}
+La fonction commence par `as.` et se termine par le type voulu : `numeric`.
+:::
+
+::: {.solution exercise="ex_conversion"}
+```r
+prix_texte <- "1500"
+as.numeric(prix_texte) + 500
+```
+:::
+
+## À retenir
+
+- `<-` range une valeur dans un objet ; R distingue majuscules et minuscules.
+- `class()` donne le type : `numeric`, `character`, `logical`…
+- `NA` est une valeur manquante, qui se propage dans les calculs.
+- `as.numeric()` convertit du texte en nombre.

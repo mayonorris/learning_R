@@ -1,0 +1,22 @@
+---
+title: "Le cursus"
+subtitle: "Neuf modules et un parcours métier, du premier code à vos propres applications. Les modules 0 à 3 sont gratuits."
+format:
+  html:
+    theme: [cosmo, assets/theme.scss]
+---
+
+| Module | Contenu | Accès | État |
+| --- | --- | --- | --- |
+| [0 · Démarrer](modules/00-demarrer/index.qmd) | À quoi sert R, premiers calculs, installation, aide | Gratuit | Disponible |
+| [1 · Initiation](modules/01-initiation/index.qmd) | Types, vecteurs, conditions, boucles, fonctions | Gratuit | Disponible |
+| 2 · Structures de données | Matrices, facteurs, listes, data frames | Gratuit | Bientôt |
+| 3 · Manipulation de données | Importer et exporter (CSV, Excel, Stata, SPSS), filtrer, résumer | Gratuit | Bientôt |
+| 4 · Visualisation | `plot()` puis ggplot2 | Freemium | Bientôt |
+| 5 · Analyse de données | Statistique descriptive, tests du χ² et de Student | Freemium | Bientôt |
+| 6 · Reporting | Rapports reproductibles avec Quarto | Freemium | Bientôt |
+| 7 · Shiny | Applications web interactives | Freemium | Bientôt |
+| 8 · R avancé | Programmation fonctionnelle, packages, tests | Freemium | Bientôt |
+| Parcours métier · Suivi-évaluation | De l'export KoboToolbox au rapport automatique | Pro | Bientôt |
+
+En « Freemium », la première leçon de chaque module est gratuite.

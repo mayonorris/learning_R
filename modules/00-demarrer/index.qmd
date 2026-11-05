@@ -1,0 +1,35 @@
+---
+title: "Module 0 · Démarrer"
+subtitle: "4 leçons · environ 40 minutes · Gratuit"
+format:
+  html:
+    theme: [cosmo, ../../assets/theme.scss]
+---
+
+Ce module vous fait passer de zéro à vos premières lignes de R, d'abord dans
+le navigateur, puis sur votre ordinateur.
+
+## Ce que vous saurez faire
+
+- Dire à quoi sert R et pourquoi l'apprendre
+- Utiliser R comme une calculatrice
+- Installer R, RStudio et des packages
+- Trouver de l'aide et comprendre un message d'erreur
+
+## Prérequis
+
+Aucun. Un téléphone ou un ordinateur avec un navigateur suffit.
+
+## Leçons
+
+| Leçon | Durée |
+| --- | --- |
+| [0.1 Pourquoi R ?](0.1-pourquoi-r.qmd) | 10 min |
+| [0.2 Vos premières lignes de R](0.2-premieres-lignes.qmd) | 10 min |
+| [0.3 Installer R, RStudio et des packages](0.3-installer-r-rstudio.qmd) | 10 min |
+| [0.4 Trouver de l'aide](0.4-trouver-de-l-aide.qmd) | 10 min |
+
+::: {.callout-note appearance="minimal"}
+Ce module s'appuie sur le support de formation « R for Data Science »
+(IMSP-CEA, décembre 2023) de Mayo T. Norris Kadanga.
+:::

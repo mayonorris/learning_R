@@ -1,0 +1,118 @@
+---
+title: "0.4 Trouver de l'aide"
+subtitle: "Module 0 · Démarrer · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Utiliser l'aide de R et comprendre les messages d'erreur les plus fréquents.
+:::
+
+## L'aide intégrée
+
+Chaque fonction de R a une fiche d'aide. Dans RStudio, elle s'ouvre dans le
+panneau en bas à droite.
+
+```{r}
+#| eval: false
+help(mean)                  # la fiche d'aide de mean()
+?mean                       # la même chose, en plus court
+??"standard deviation"      # chercher un sujet dans toutes les fiches
+example(mean)               # lancer les exemples de la fiche
+```
+
+Pour connaître seulement les arguments d'une fonction :
+
+```{r}
+args(round)
+```
+
+Une fiche d'aide suit toujours le même plan : **Description** (à quoi sert la
+fonction), **Usage** (comment l'écrire), **Arguments** (ce qu'on lui donne),
+**Value** (ce qu'elle renvoie) et **Examples**.
+
+## Lire un message d'erreur
+
+Les messages de R sont en anglais, mais ils suivent quelques modèles. Une
+**erreur** (*Error*) arrête le code ; un **avertissement** (*Warning*) le
+laisse continuer mais signale un problème.
+
+```{r}
+#| error: true
+prin("Bonjour")
+```
+
+R ne connaît pas de fonction `prin` : il manque une lettre à `print`.
+
+```{r}
+#| error: true
+notes <- c(12, 15, 9)
+mean(note)
+```
+
+L'objet s'appelle `notes`, avec un « s » : R ne trouve pas `note`.
+
+```{r}
+log(-1)
+```
+
+Le logarithme d'un nombre négatif n'existe pas : R renvoie `NaN` (*Not a
+Number*) et un avertissement.
+
+## Les erreurs les plus fréquentes
+
+| Message | Ce qu'il veut dire |
+| --- | --- |
+| `could not find function "…"` | Nom de fonction mal écrit, ou package non chargé avec `library()` |
+| `object '…' not found` | Nom d'objet mal écrit, ou ligne qui le crée pas encore lancée |
+| `unexpected symbol` | Il manque souvent une virgule, un opérateur ou une parenthèse |
+| `unexpected end of input` | Une parenthèse ou une accolade n'est pas refermée |
+| `non-numeric argument to binary operator` | Un calcul avec du texte, par exemple `"250" + 50` |
+
+## Ailleurs
+
+- Copiez le message d'erreur exact dans un moteur de recherche : d'autres ont
+  eu le même problème.
+- Posez votre question à la communauté, en collant le code et le message
+  complet.
+
+## Exercice
+
+Ce code produit une erreur. Corrigez-le pour qu'il affiche `Bonjour`.
+
+```{webr}
+#| exercise: ex_erreur
+prin("Bonjour")
+```
+
+```{webr}
+#| exercise: ex_erreur
+#| check: true
+if (identical(.result, "Bonjour")) {
+  list(correct = TRUE, message = "Corrigé ! Il manquait le t de print.")
+} else {
+  list(correct = FALSE, message = "Le code doit afficher exactement \"Bonjour\".")
+}
+```
+
+::: {.hint exercise="ex_erreur"}
+Lisez le message : R ne trouve pas la fonction `prin`. Quelle lettre manque-t-il ?
+:::
+
+::: {.solution exercise="ex_erreur"}
+```r
+print("Bonjour")
+```
+:::
+
+## À retenir
+
+- `?nom_de_fonction` ouvre l'aide ; `args()` donne les arguments.
+- Une erreur arrête le code, un avertissement le signale seulement.
+- La plupart des erreurs viennent d'une faute de frappe ou d'une parenthèse
+  oubliée.

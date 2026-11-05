@@ -2,13 +2,18 @@
 
 Plateforme de formation à R en français, d'abord pour le Togo et le Bénin.
 
-## État actuel : test technique
+## Contenu
 
-Le dépôt contient un premier site [Quarto](https://quarto.org) avec une leçon de
-test (`modules/01-initiation/1.2-vecteurs.qmd`). R y tourne dans le navigateur
-grâce à [webR](https://docs.r-wasm.org/webr/) et à l'extension
-[quarto-live](https://github.com/r-wasm/quarto-live). Le protocole du test sur
-téléphone est décrit dans [`SPIKE.md`](SPIKE.md).
+Le site est construit avec [Quarto](https://quarto.org). R tourne dans le
+navigateur grâce à [webR](https://docs.r-wasm.org/webr/) et à l'extension
+[quarto-live](https://github.com/r-wasm/quarto-live).
+
+- `index.qmd`, `cursus.qmd` : accueil et catalogue des modules
+- `modules/00-demarrer/` : module 0, 4 leçons
+- `modules/01-initiation/` : module 1, 7 leçons
+- `assets/theme.scss` : couleurs et typographie
+- `assets/mesure.html` : barre de mesure du test technique (voir
+  [`SPIKE.md`](SPIKE.md)), à inclure dans une page pour refaire un test
 
 ## Rendre le site sur son ordinateur
 

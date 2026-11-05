@@ -1,0 +1,132 @@
+---
+title: "1.4 Conditions"
+subtitle: "Module 1 · Initiation · 10 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Exécuter du code seulement si une condition est vraie, avec `if`, `else` et
+`ifelse()`.
+:::
+
+## Comparer
+
+| Opérateur | Signification |
+| --- | --- |
+| `==` | égal à (deux signes `=`) |
+| `!=` | différent de |
+| `<`, `<=` | inférieur, inférieur ou égal |
+| `>`, `>=` | supérieur, supérieur ou égal |
+
+Pour combiner des conditions : `&` signifie « et », la barre verticale `|`
+signifie « ou », et `!` signifie « non ».
+
+```{r}
+note <- 12
+note >= 10
+note >= 10 & note < 14
+note < 10 | note > 16
+```
+
+## `if` et `else`
+
+```{r}
+note <- 12
+if (note >= 10) {
+  print("Admis")
+} else {
+  print("Ajourné")
+}
+```
+
+Le code entre accolades ne s'exécute que si la condition est vraie. `else`
+donne ce qu'il faut faire sinon. Pour plus de deux cas, enchaînez avec
+`else if` :
+
+```{r}
+note <- 17
+if (note >= 16) {
+  print("Très bien")
+} else if (note >= 10) {
+  print("Admis")
+} else {
+  print("Ajourné")
+}
+```
+
+::: {.callout-warning title="Relisez chaque branche"}
+Si `if` et `else` affichent le même message, le code tourne sans erreur… mais
+la réponse est fausse une fois sur deux. Vérifiez que chaque branche dit bien
+ce qu'elle doit dire.
+:::
+
+## `ifelse()` pour tout un vecteur
+
+`if` ne teste qu'une seule valeur. Pour classer toutes les valeurs d'un
+vecteur d'un coup, utilisez `ifelse(condition, si_vrai, si_faux)` :
+
+```{r}
+notes <- c(12, 8, 15, 9.5, 10)
+ifelse(notes >= 10, "Admis", "Ajourné")
+```
+
+## Arrêter le code avec `stop()`
+
+Une condition sert aussi à vérifier une donnée avant de l'utiliser :
+
+```{r}
+#| error: true
+x <- c("a", "b")
+if (!is.numeric(x)) {
+  stop("x doit être un vecteur de nombres.")
+}
+```
+
+`stop()` arrête tout avec votre message ; `warning()` affiche un avertissement
+sans arrêter. Vous les utiliserez dans vos propres fonctions (leçon 1.6).
+
+## Exercice
+
+Classez ces cinq notes en « Admis » (10 ou plus) ou « Ajourné ».
+
+```{webr}
+#| exercise: ex_admis
+notes <- c(12, 8, 15, 9.5, 10)
+ifelse(notes ______ 10, "Admis", "Ajourné")
+```
+
+```{webr}
+#| exercise: ex_admis
+#| check: true
+attendu <- c("Admis", "Ajourné", "Admis", "Ajourné", "Admis")
+if (identical(.result, attendu)) {
+  list(correct = TRUE, message = "Bravo : 10 tout juste est bien admis.")
+} else if (identical(.result, c("Admis", "Ajourné", "Admis", "Ajourné", "Ajourné"))) {
+  list(correct = FALSE, message = "Presque : la note de 10 doit être admise. Utilisez « supérieur ou égal ».")
+} else {
+  list(correct = FALSE, message = "Pas encore. Quel opérateur signifie « 10 ou plus » ?")
+}
+```
+
+::: {.hint exercise="ex_admis"}
+« 10 ou plus » s'écrit `>=`.
+:::
+
+::: {.solution exercise="ex_admis"}
+```r
+notes <- c(12, 8, 15, 9.5, 10)
+ifelse(notes >= 10, "Admis", "Ajourné")
+```
+:::
+
+## À retenir
+
+- `==` compare, `=` (ou `<-`) range une valeur : ne les confondez pas.
+- `if (condition) { ... } else { ... }` choisit entre deux chemins.
+- `ifelse()` classe toutes les valeurs d'un vecteur d'un coup.
+- `stop()` arrête le code avec un message clair.

@@ -1,5 +1,11 @@
 # Test technique : webR sur téléphone
 
+## Résultat
+
+**Novembre 2026 : test concluant, webR est retenu.** La leçon de test passe
+sur téléphone. Les mesures détaillées (téléphones, temps, données) restent à
+reporter dans le tableau ci-dessous.
+
 ## La question à trancher
 
 Une leçon où R tourne dans le navigateur (webR) est-elle utilisable sur un

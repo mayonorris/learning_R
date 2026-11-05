@@ -1,0 +1,165 @@
+---
+title: "1.7 Mini-projet : recoder mean() et min()"
+subtitle: "Module 1 · Initiation · 15 minutes"
+format:
+  live-html:
+    theme: [cosmo, ../../assets/theme.scss]
+engine: knitr
+---
+
+{{< include ../../_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-note title="Objectif"}
+Réunir tout le module 1 : écrire vous-même une moyenne et un minimum qui
+gèrent les valeurs manquantes, puis les comparer aux fonctions de R.
+:::
+
+## La situation
+
+Vous suivez le prix du kilo de maïs sur huit marchés. Deux relevés manquent.
+Les prix sont des données d'exemple, en FCFA.
+
+```{r}
+prix_mais <- c(250, 300, NA, 275, 225, 310, 260, NA)
+length(prix_mais)
+sum(is.na(prix_mais))
+```
+
+R sait déjà calculer la moyenne et le minimum :
+
+```{r}
+mean(prix_mais, na.rm = TRUE)
+min(prix_mais, na.rm = TRUE)
+```
+
+Votre mission : obtenir les mêmes résultats avec vos propres fonctions.
+
+## Étape 1 : votre moyenne
+
+Complétez la fonction : si `na_rm` est vrai, retirez les `NA`, puis divisez la
+somme par le nombre de valeurs.
+
+```{webr}
+#| exercise: ex_moyenne
+prix_mais <- c(250, 300, NA, 275, 225, 310, 260, NA)
+
+ma_moyenne <- function(x, na_rm = FALSE) {
+  if (na_rm) {
+    x <- ______
+  }
+  sum(x) / ______
+}
+
+ma_moyenne(prix_mais, na_rm = TRUE)
+```
+
+```{webr}
+#| exercise: ex_moyenne
+#| check: true
+if (isTRUE(all.equal(.result, 270))) {
+  list(correct = TRUE, message = "Bravo : 270 FCFA, comme mean(prix_mais, na.rm = TRUE).")
+} else if (length(.result) == 1 && is.na(.result)) {
+  list(correct = FALSE, message = "Le résultat est NA : les valeurs manquantes n'ont pas été retirées.")
+} else if (isTRUE(all.equal(.result, 202.5))) {
+  list(correct = FALSE, message = "Vous divisez par 8 : length() doit compter les valeurs après avoir retiré les NA.")
+} else {
+  list(correct = FALSE, message = "Le résultat attendu est 270. Relisez la leçon 1.6.")
+}
+```
+
+::: {.hint exercise="ex_moyenne"}
+`x[!is.na(x)]` garde les valeurs non manquantes, et `length(x)` les compte.
+:::
+
+::: {.solution exercise="ex_moyenne"}
+```r
+prix_mais <- c(250, 300, NA, 275, 225, 310, 260, NA)
+
+ma_moyenne <- function(x, na_rm = FALSE) {
+  if (na_rm) {
+    x <- x[!is.na(x)]
+  }
+  sum(x) / length(x)
+}
+
+ma_moyenne(prix_mais, na_rm = TRUE)
+```
+:::
+
+## Étape 2 : votre minimum
+
+Complétez la boucle : chaque fois qu'une valeur est plus petite que
+`plus_petit`, elle la remplace.
+
+```{webr}
+#| exercise: ex_minimum
+prix_mais <- c(250, 300, NA, 275, 225, 310, 260, NA)
+
+mon_min <- function(x) {
+  x <- x[!is.na(x)]
+  plus_petit <- x[1]
+  for (valeur in x) {
+    if (______) {
+      plus_petit <- valeur
+    }
+  }
+  plus_petit
+}
+
+mon_min(prix_mais)
+```
+
+```{webr}
+#| exercise: ex_minimum
+#| check: true
+if (isTRUE(all.equal(.result, 225))) {
+  list(correct = TRUE, message = "Bravo : 225 FCFA, comme min(prix_mais, na.rm = TRUE).")
+} else if (isTRUE(all.equal(.result, 310))) {
+  list(correct = FALSE, message = "Vous avez trouvé le maximum : inversez la comparaison.")
+} else {
+  list(correct = FALSE, message = "Le résultat attendu est 225. Comparez valeur à plus_petit.")
+}
+```
+
+::: {.hint exercise="ex_minimum"}
+La condition compare la valeur du tour au plus petit trouvé jusqu'ici :
+`valeur < plus_petit`.
+:::
+
+::: {.solution exercise="ex_minimum"}
+```r
+prix_mais <- c(250, 300, NA, 275, 225, 310, 260, NA)
+
+mon_min <- function(x) {
+  x <- x[!is.na(x)]
+  plus_petit <- x[1]
+  for (valeur in x) {
+    if (valeur < plus_petit) {
+      plus_petit <- valeur
+    }
+  }
+  plus_petit
+}
+
+mon_min(prix_mais)
+```
+:::
+
+## Pour aller plus loin
+
+Avec vos propres relevés (des prix, des notes, des ventes), essayez ici :
+
+- ajoutez à `ma_moyenne()` un `stop()` si `x` n'est pas numérique ;
+- écrivez `mon_max()` sur le modèle de `mon_min()` ;
+- comparez vos fonctions avec `mean()`, `min()` et `max()`.
+
+```{webr}
+mes_valeurs <- c(12, 15, NA, 9, 14)
+mean(mes_valeurs, na.rm = TRUE)
+```
+
+## Bilan du module 1
+
+Vous savez maintenant ranger des valeurs, manipuler des vecteurs, écrire des
+conditions, des boucles et vos propres fonctions. Le module 2 passe aux
+tableaux : matrices, listes et data frames.
