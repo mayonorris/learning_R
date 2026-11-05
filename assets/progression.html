@@ -1,0 +1,352 @@
+<!-- Progression (US-05, US-09, US-16), partage WhatsApp (US-10) et erreurs R
+     expliquées en français (US-07). Tout reste dans le navigateur : rien n'est
+     envoyé à un serveur. Inclus dans chaque page via include-after-body. -->
+<style>
+  .lr-fin { margin: 2.5rem 0 1rem; padding: 1.25rem; border: 1px dashed #C9D3E0; border-radius: 12px; display: grid; gap: .75rem; }
+  .lr-ligne { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+  .lr-etat { margin: 0; color: #56647A; }
+  .lr-lien-bouton { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
+  .lr-coche { color: #1E7B4F; font-weight: 700; margin-left: .35em; }
+  .lr-badge-mod { font-size: .85em; color: #56647A; margin-left: .4em; white-space: nowrap; }
+  .lr-barre { height: 8px; background: #E9EEF5; border-radius: 99px; overflow: hidden; }
+  .lr-barre > i { display: block; height: 100%; background: #276DC3; border-radius: 99px; }
+  .lr-barre.lr-complet > i { background: #1E7B4F; }
+  .lr-erreur { margin: .5rem 0 1rem; padding: .6rem .8rem; border-left: 4px solid #C2571A; background: #FBEADF; border-radius: 6px; font-size: .95rem; color: #14233A; }
+  .lr-erreur strong { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: #9C4313; }
+  .lr-carte { border: 1px solid #D9E0EB; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .lr-grand { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+  .lr-jours { display: flex; gap: .4rem; margin-top: .75rem; }
+  .lr-jour { display: grid; justify-items: center; gap: .2rem; font-size: .75rem; color: #56647A; }
+  .lr-jour b { width: 1.9rem; height: 1.9rem; border-radius: 8px; background: #E9EEF5; display: block; }
+  .lr-jour.lr-actif b { background: #C2571A; }
+  .lr-code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1.2rem; font-weight: 700; letter-spacing: .06em; background: #F4F1EC; padding: .4rem .8rem; border-radius: 8px; user-select: all; }
+  .lr-liste { list-style: none; padding: 0; margin: .5rem 0 0; }
+  .lr-liste li { padding: .15rem 0; }
+  .lr-message { margin: .5rem 0 0; font-weight: 600; }
+</style>
+<script>
+(function () {
+  "use strict";
+
+  var LECONS = [
+    { id: "0.1", titre: "Pourquoi R ?", chemin: "modules/00-demarrer/0.1-pourquoi-r.html" },
+    { id: "0.2", titre: "Vos premières lignes de R", chemin: "modules/00-demarrer/0.2-premieres-lignes.html" },
+    { id: "0.3", titre: "Installer R, RStudio et des packages", chemin: "modules/00-demarrer/0.3-installer-r-rstudio.html" },
+    { id: "0.4", titre: "Trouver de l'aide", chemin: "modules/00-demarrer/0.4-trouver-de-l-aide.html" },
+    { id: "1.1", titre: "Valeurs et types", chemin: "modules/01-initiation/1.1-valeurs-et-types.html" },
+    { id: "1.2", titre: "Vecteurs", chemin: "modules/01-initiation/1.2-vecteurs.html" },
+    { id: "1.3", titre: "Fonctions de base", chemin: "modules/01-initiation/1.3-fonctions-de-base.html" },
+    { id: "1.4", titre: "Conditions", chemin: "modules/01-initiation/1.4-conditions.html" },
+    { id: "1.5", titre: "Boucles", chemin: "modules/01-initiation/1.5-boucles.html" },
+    { id: "1.6", titre: "Écrire ses fonctions", chemin: "modules/01-initiation/1.6-ecrire-ses-fonctions.html" },
+    { id: "1.7", titre: "Mini-projet", chemin: "modules/01-initiation/1.7-mini-projet.html" }
+  ];
+  var MODULES = [
+    { num: "0", titre: "Démarrer", chemin: "modules/00-demarrer/" },
+    { num: "1", titre: "Initiation", chemin: "modules/01-initiation/" }
+  ];
+  var CLE = "learningr-progression-v1";
+  var JOURS_SEMAINE = ["D", "L", "M", "M", "J", "V", "S"];
+
+  /* ---------- Stockage ---------- */
+  function lire() {
+    try {
+      var s = JSON.parse(localStorage.getItem(CLE));
+      if (s && typeof s.faites === "object" && s.faites !== null && Array.isArray(s.jours)) return s;
+    } catch (e) {}
+    return { faites: {}, jours: [] };
+  }
+  function ecrire(s) {
+    try { localStorage.setItem(CLE, JSON.stringify(s)); return true; } catch (e) { return false; }
+  }
+  function stockageDisponible() {
+    try { localStorage.setItem(CLE + "-test", "1"); localStorage.removeItem(CLE + "-test"); return true; } catch (e) { return false; }
+  }
+
+  /* ---------- Dates et série ---------- */
+  function deux(n) { return (n < 10 ? "0" : "") + n; }
+  function jourISO(d) { return d.getFullYear() + "-" + deux(d.getMonth() + 1) + "-" + deux(d.getDate()); }
+  function serie(jours, ref) {
+    var presents = {};
+    jours.forEach(function (j) { presents[j] = true; });
+    var d = new Date((ref || new Date()).getTime());
+    if (!presents[jourISO(d)]) {
+      d.setDate(d.getDate() - 1);
+      if (!presents[jourISO(d)]) return 0;
+    }
+    var n = 0;
+    while (presents[jourISO(d)]) { n += 1; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+
+  /* ---------- Code de reprise ---------- */
+  function controle(bits) { return (bits * 7919 + 101) % 1679616; }
+  function encoder(faites) {
+    var bits = 0;
+    LECONS.forEach(function (l, i) { if (faites[l.id]) bits += Math.pow(2, i); });
+    var a = ("0000" + bits.toString(36).toUpperCase()).slice(-4);
+    var c = ("0000" + controle(bits).toString(36).toUpperCase()).slice(-4);
+    return "LR-" + a + "-" + c;
+  }
+  function decoder(code) {
+    var m = String(code).trim().toUpperCase().match(/^LR-([0-9A-Z]{4})-([0-9A-Z]{4})$/);
+    if (!m) return null;
+    var bits = parseInt(m[1], 36);
+    if (!(bits >= 0) || bits >= Math.pow(2, LECONS.length)) return null;
+    if (parseInt(m[2], 36) !== controle(bits)) return null;
+    return LECONS.filter(function (l, i) { return Math.floor(bits / Math.pow(2, i)) % 2 === 1; }).map(function (l) { return l.id; });
+  }
+
+  /* ---------- Erreurs R expliquées en français ---------- */
+  var ERREURS = [
+    [/object '([^']+)' not found/, function (m) { return "R ne connaît pas « " + m[1] + " » : le nom est peut-être mal écrit (majuscules comprises), ou la ligne qui le crée n'a pas encore été lancée."; }],
+    [/could not find function "([^"]+)"/, function (m) { return "La fonction « " + m[1] + " » n'existe pas : son nom est peut-être mal écrit, ou son package n'est pas chargé avec library()."; }],
+    [/there is no package called .([^'’]+)./, function (m) { return "Le package « " + m[1] + " » n'est pas installé. Installez-le une fois avec install.packages(\"" + m[1] + "\")."; }],
+    [/unexpected end of input/, function () { return "Le code s'arrête trop tôt : une parenthèse, un crochet ou une accolade n'est sans doute pas refermé."; }],
+    [/unexpected '\)'/, function () { return "Il y a une parenthèse fermante « ) » en trop."; }],
+    [/unexpected '\]'/, function () { return "Il y a un crochet fermant « ] » en trop."; }],
+    [/unexpected '\}'/, function () { return "Il y a une accolade fermante « } » en trop."; }],
+    [/unexpected string constant/, function () { return "Deux textes se suivent sans rien entre eux : il manque sans doute une virgule ou un opérateur."; }],
+    [/unexpected numeric constant/, function () { return "Deux nombres se suivent sans rien entre eux : il manque sans doute une virgule, par exemple c(1, 2) et non c(1 2)."; }],
+    [/unexpected symbol/, function () { return "R ne comprend pas l'enchaînement : il manque sans doute une virgule, un opérateur ou une parenthèse, ou un nom contient une espace."; }],
+    [/non-numeric argument to binary operator/, function () { return "Un calcul porte sur du texte. Retirez les guillemets, ou convertissez le texte en nombre avec as.numeric()."; }],
+    [/argument "([^"]+)" is missing, with no default/, function (m) { return "La fonction attend l'argument « " + m[1] + " », qui n'a pas été donné et n'a pas de valeur par défaut."; }],
+    [/unused argument/, function () { return "La fonction ne connaît pas cet argument : vérifiez son nom avec args(), ou retirez-le."; }],
+    [/invalid 'type' \(character\) of argument/, function () { return "La fonction attend des nombres, pas du texte. Retirez les guillemets autour des valeurs."; }],
+    [/missing value where TRUE\/FALSE needed/, function () { return "La condition du if vaut NA : une des valeurs testées est manquante. Testez-la d'abord avec is.na()."; }],
+    [/the condition has length > 1/, function () { return "if ne teste qu'une seule valeur, mais il en a reçu plusieurs. Pour tout un vecteur, utilisez ifelse(), ou any() et all()."; }],
+    [/subscript out of bounds/, function () { return "Vous demandez une position qui n'existe pas : vérifiez la taille avec length() ou dim()."; }],
+    [/argument is not numeric or logical: returning NA/, function () { return "La fonction a reçu du texte au lieu de nombres, et renvoie NA."; }],
+    [/NAs introduced by coercion/, function () { return "Certaines valeurs n'ont pas pu être converties en nombre : elles deviennent NA."; }],
+    [/NaNs produced/, function () { return "Le calcul est impossible pour certaines valeurs (par exemple le logarithme d'un nombre négatif) : R renvoie NaN."; }]
+  ];
+  function expliquer(texte) {
+    for (var i = 0; i < ERREURS.length; i++) {
+      var m = texte.match(ERREURS[i][0]);
+      if (m) return { texte: ERREURS[i][1](m), avertissement: !/Error|Erreur/.test(texte) };
+    }
+    return null;
+  }
+
+  // Exposé pour les tests automatiques.
+  window.LearningRProgression = { serie: serie, encoder: encoder, decoder: decoder, expliquer: expliquer, jourISO: jourISO };
+
+  /* ---------- Repères dans la page ---------- */
+  function racine() {
+    var s = document.querySelector('script[src*="site_libs/"]');
+    if (s && s.src) return s.src.slice(0, s.src.indexOf("site_libs/"));
+    return location.href.replace(/[^\/]*$/, "");
+  }
+  var RACINE = racine();
+  function cheminRelatif(url) {
+    if (url.indexOf(RACINE) !== 0) return null;
+    return url.slice(RACINE.length).split("#")[0].split("?")[0].replace(/index\.html$/, "");
+  }
+  function leconDuChemin(chemin) {
+    for (var i = 0; i < LECONS.length; i++) if (LECONS[i].chemin === chemin) return LECONS[i];
+    return null;
+  }
+  function moduleDuChemin(chemin) {
+    for (var i = 0; i < MODULES.length; i++) if (MODULES[i].chemin === chemin) return MODULES[i];
+    return null;
+  }
+  function leconsDuModule(mod) { return LECONS.filter(function (l) { return l.id.charAt(0) === mod.num; }); }
+  function nbFaites(etat, mod) { return leconsDuModule(mod).filter(function (l) { return etat.faites[l.id]; }).length; }
+  function accord(n, mot) { return n + " " + mot + (n > 1 ? "s" : ""); }
+  function el(tag, attrs, html) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* ---------- Coches dans les liens (menu, tableaux, navigation) ---------- */
+  function marquerLiens() {
+    var etat = lire();
+    Array.prototype.forEach.call(document.querySelectorAll(".lr-coche-auto, .lr-badge-auto"), function (n) { n.remove(); });
+    Array.prototype.forEach.call(document.querySelectorAll("a[href]"), function (a) {
+      if (a.closest(".lr-fin, #lr-progression, .navbar")) return;
+      var chemin = cheminRelatif(a.href);
+      if (chemin === null) return;
+      var cible = a.querySelector(".menu-text, .sidebar-item-text") || a;
+      var lecon = leconDuChemin(chemin);
+      if (lecon && etat.faites[lecon.id]) {
+        cible.appendChild(el("span", { "class": "lr-coche lr-coche-auto", "aria-label": "leçon terminée", title: "Leçon terminée" }, "✓"));
+        return;
+      }
+      var mod = moduleDuChemin(chemin);
+      if (mod) {
+        var n = nbFaites(etat, mod);
+        if (n > 0) cible.appendChild(el("span", { "class": "lr-badge-mod lr-badge-auto" }, n + "/" + leconsDuModule(mod).length));
+      }
+    });
+  }
+
+  /* ---------- Bloc de fin de leçon ---------- */
+  function blocFinDeLecon(lecon) {
+    var main = document.querySelector("main.content") || document.querySelector("main");
+    if (!main) return;
+    var mod = MODULES.filter(function (m) { return m.num === lecon.id.charAt(0); })[0];
+    var titre = document.title.replace(/ – .*$/, "");
+    var partage = "https://wa.me/?text=" + encodeURIComponent("J'apprends R en français avec Learning R : " + titre + " " + location.href.split("#")[0]);
+    var bloc = el("section", { "class": "lr-fin", "aria-label": "Fin de la leçon" });
+    main.appendChild(bloc);
+
+    function rendre(message) {
+      var etat = lire();
+      var faite = !!etat.faites[lecon.id];
+      var n = nbFaites(etat, mod), total = leconsDuModule(mod).length;
+      bloc.innerHTML =
+        '<div class="lr-ligne">' +
+          (faite
+            ? '<span class="btn btn-success disabled" aria-disabled="true">Leçon terminée ✓</span> <button type="button" class="lr-lien-bouton" id="lr-annuler">Marquer comme non terminée</button>'
+            : '<button type="button" class="btn btn-primary" id="lr-terminer">Marquer la leçon comme terminée</button>') +
+          ' <a class="btn btn-outline-primary" target="_blank" rel="noopener" href="' + esc(partage) + '">Partager sur WhatsApp</a>' +
+        "</div>" +
+        '<p class="lr-etat">Module ' + mod.num + " · " + esc(mod.titre) + " : " + n + " " + (n > 1 ? "leçons terminées" : "leçon terminée") + " sur " + total +
+          ' · <a href="' + esc(RACINE + "progression.html") + '">Ma progression</a></p>' +
+        (message ? '<p class="lr-message" role="status">' + esc(message) + "</p>" : "");
+      var b = bloc.querySelector("#lr-terminer");
+      if (b) b.addEventListener("click", function () {
+        var s = lire();
+        s.faites[lecon.id] = jourISO(new Date());
+        var j = jourISO(new Date());
+        if (s.jours.indexOf(j) === -1) s.jours.push(j);
+        if (!ecrire(s)) { rendre("Votre navigateur bloque l'enregistrement (navigation privée ?) : la progression ne peut pas être gardée."); return; }
+        var k = serie(s.jours);
+        rendre("Bravo ! Série en cours : " + accord(k, "jour") + " de suite.");
+        marquerLiens();
+      });
+      var a = bloc.querySelector("#lr-annuler");
+      if (a) a.addEventListener("click", function () {
+        var s = lire();
+        delete s.faites[lecon.id];
+        ecrire(s);
+        rendre("");
+        marquerLiens();
+      });
+    }
+    rendre("");
+  }
+
+  /* ---------- Page « Ma progression » ---------- */
+  function pageProgression(racineEl) {
+    var message = "";
+    var confirmerEffacement = false;
+
+    function rendre() {
+      var etat = lire();
+      var k = serie(etat.jours);
+      var presents = {};
+      etat.jours.forEach(function (j) { presents[j] = true; });
+      var jours = "";
+      for (var i = 6; i >= 0; i--) {
+        var d = new Date(); d.setDate(d.getDate() - i);
+        jours += '<div class="lr-jour' + (presents[jourISO(d)] ? " lr-actif" : "") + '"><b></b>' + (i === 0 ? "Auj." : JOURS_SEMAINE[d.getDay()]) + "</div>";
+      }
+      var suivante = LECONS.filter(function (l) { return !etat.faites[l.id]; })[0];
+      var html = "";
+      if (!stockageDisponible()) {
+        html += '<div class="lr-carte"><p>Votre navigateur bloque l\'enregistrement (navigation privée, ou données du site bloquées) : votre progression ne peut pas être gardée.</p></div>';
+      }
+      html += '<div class="lr-carte"><p class="lr-grand">' + k + '</p><p class="lr-etat">' + (k > 1 ? "jours de suite" : "jour de suite") + " avec au moins une leçon terminée</p><div class=\"lr-jours\">" + jours + "</div></div>";
+      html += '<div class="lr-carte">' + (suivante
+        ? "<p><strong>Reprendre :</strong> <a href=\"" + esc(RACINE + suivante.chemin) + "\">" + suivante.id + " " + esc(suivante.titre) + "</a></p>"
+        : "<p><strong>Bravo :</strong> vous avez terminé toutes les leçons disponibles.</p>") + "</div>";
+      MODULES.forEach(function (mod) {
+        var liste = leconsDuModule(mod);
+        var n = nbFaites(etat, mod);
+        var pct = Math.round(n / liste.length * 100);
+        html += '<div class="lr-carte"><p><a href="' + esc(RACINE + mod.chemin) + '"><strong>Module ' + mod.num + " · " + esc(mod.titre) + "</strong></a> : " + n + " / " + liste.length + "</p>" +
+          '<div class="lr-barre' + (n === liste.length ? " lr-complet" : "") + '"><i style="width:' + pct + '%"></i></div><ul class="lr-liste">' +
+          liste.map(function (l) {
+            return "<li>" + (etat.faites[l.id] ? '<span class="lr-coche" aria-label="terminée">✓</span> ' : "") + '<a href="' + esc(RACINE + l.chemin) + '">' + l.id + " " + esc(l.titre) + "</a></li>";
+          }).join("") + "</ul></div>";
+      });
+      html += '<div class="lr-carte"><h2 style="margin-top:0">Continuer sur un autre appareil</h2>' +
+        "<p>Sans compte : copiez ce code ici, puis collez-le sur l'autre appareil, par exemple l'ordinateur de la fac.</p>" +
+        '<p class="lr-ligne"><span class="lr-code" id="lr-code">' + encoder(etat.faites) + '</span> <button type="button" class="btn btn-outline-primary btn-sm" id="lr-copier">Copier le code</button></p>' +
+        '<form id="lr-coller" class="lr-ligne"><label for="lr-champ" style="width:100%">Vous avez un code ? Collez-le ici :</label>' +
+        '<input id="lr-champ" class="form-control" style="max-width:14rem" placeholder="LR-XXXX-XXXX" autocomplete="off" autocapitalize="characters"> <button type="submit" class="btn btn-primary btn-sm">Reprendre</button></form>' +
+        (message ? '<p class="lr-message" role="status">' + esc(message) + "</p>" : "") + "</div>";
+      html += '<p class="lr-etat">Votre progression est enregistrée dans ce navigateur, sur cet appareil. Elle n\'est envoyée nulle part. ' +
+        '<button type="button" class="lr-lien-bouton" id="lr-effacer">' + (confirmerEffacement ? "Confirmer : tout effacer" : "Effacer ma progression") + "</button></p>";
+      racineEl.innerHTML = html;
+
+      racineEl.querySelector("#lr-copier").addEventListener("click", function () {
+        var code = racineEl.querySelector("#lr-code");
+        var selectionner = function () {
+          var r = document.createRange(); r.selectNodeContents(code);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          message = "Code sélectionné : copiez-le avec le menu de votre téléphone."; rendre();
+        };
+        try {
+          navigator.clipboard.writeText(code.textContent).then(function () { message = "Code copié."; rendre(); }, selectionner);
+        } catch (e) { selectionner(); }
+      });
+      racineEl.querySelector("#lr-coller").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var ids = decoder(racineEl.querySelector("#lr-champ").value);
+        if (!ids) { message = "Ce code n'est pas valide. Il ressemble à LR-XXXX-XXXX : vérifiez chaque caractère."; rendre(); return; }
+        var s = lire();
+        var ajout = 0;
+        ids.forEach(function (id) { if (!s.faites[id]) { s.faites[id] = jourISO(new Date()); ajout += 1; } });
+        ecrire(s);
+        message = "Progression reprise : " + accord(ajout, "leçon") + " " + (ajout > 1 ? "ajoutées" : "ajoutée") + ".";
+        rendre();
+        marquerLiens();
+      });
+      racineEl.querySelector("#lr-effacer").addEventListener("click", function () {
+        if (!confirmerEffacement) { confirmerEffacement = true; message = ""; rendre(); return; }
+        ecrire({ faites: {}, jours: [] });
+        confirmerEffacement = false;
+        message = "Progression effacée.";
+        rendre();
+        marquerLiens();
+      });
+    }
+    rendre();
+  }
+
+  /* ---------- Erreurs expliquées : sorties statiques et sorties de webR ---------- */
+  function annoterErreurs() {
+    var zone = document.querySelector("main") || document.body;
+    var candidats = zone.querySelectorAll('pre, .cell-output-error, .cell-output-stderr, [class*="error"]');
+    Array.prototype.forEach.call(candidats, function (n) {
+      if (n.closest(".lr-erreur, .lr-fin, #lr-progression")) return;
+      if (n.matches("pre.sourceCode")) return;
+      if (n.tagName !== "PRE" && n.querySelector("pre")) return;
+      var texte = n.textContent || "";
+      if (n.getAttribute("data-lr-texte") === texte) return;
+      n.setAttribute("data-lr-texte", texte);
+      if (n._lrBoite) { n._lrBoite.remove(); n._lrBoite = null; }
+      var exp = expliquer(texte);
+      if (!exp) return;
+      var boite = el("div", { "class": "lr-erreur", role: "note" },
+        "<strong>" + (exp.avertissement ? "Avertissement expliqué" : "Erreur expliquée") + "</strong>" + esc(exp.texte));
+      n.insertAdjacentElement("afterend", boite);
+      n._lrBoite = boite;
+    });
+  }
+
+  function demarrer() {
+    var m = location.pathname.match(/\/(\d\.\d)-[^\/]*\.html$/);
+    var lecon = m ? leconDuChemin(cheminRelatif(location.href)) : null;
+    if (lecon) blocFinDeLecon(lecon);
+    var p = document.getElementById("lr-progression");
+    if (p) pageProgression(p);
+    marquerLiens();
+    annoterErreurs();
+    var attente = null;
+    var observateur = new MutationObserver(function () {
+      clearTimeout(attente);
+      attente = setTimeout(annoterErreurs, 300);
+    });
+    observateur.observe(document.querySelector("main") || document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
+  else demarrer();
+})();
+</script>

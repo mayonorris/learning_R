@@ -4,6 +4,7 @@ subtitle: "Neuf modules et un parcours métier, du premier code à vos propres a
 format:
   html:
     theme: [cosmo, assets/theme.scss]
+    include-after-body: assets/progression.html
 ---
 
 | Module | Contenu | Accès | État |
