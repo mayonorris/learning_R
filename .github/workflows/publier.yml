@@ -30,8 +30,13 @@ jobs:
       - name: Installer knitr et rmarkdown
         run: Rscript -e 'install.packages(c("knitr", "rmarkdown"))'
 
+      # Installée hors du projet : dans le projet, `quarto add` lirait la leçon,
+      # qui inclut un fichier de l'extension pas encore présent.
       - name: Installer l'extension quarto-live (webR)
-        run: quarto add r-wasm/quarto-live --no-prompt
+        run: |
+          tmp="$(mktemp -d)"
+          (cd "$tmp" && quarto add r-wasm/quarto-live --no-prompt)
+          cp -r "$tmp/_extensions" "$GITHUB_WORKSPACE/"
 
       - name: Rendre le site
         run: quarto render

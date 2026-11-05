@@ -13,9 +13,13 @@ téléphone est décrit dans [`SPIKE.md`](SPIKE.md).
 ## Rendre le site sur son ordinateur
 
 ```bash
-quarto add r-wasm/quarto-live
+tmp="$(mktemp -d)" && (cd "$tmp" && quarto add r-wasm/quarto-live --no-prompt) && cp -r "$tmp/_extensions" .
 quarto preview
 ```
+
+L'extension s'installe hors du projet, puis se copie : lancée directement dans
+le projet, `quarto add` échoue, car la leçon inclut déjà un fichier de
+l'extension.
 
 Le workflow `.github/workflows/publier.yml` fait la même chose sur GitHub et
 publie le site sur GitHub Pages à chaque mise à jour de `main`.
